@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AI Business Report</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="box" style="width:95%;max-width:900px;">
+
+        <!-- 🔹 TOP SUMMARY (UNCHANGED LOGIC) -->
+        <h2>🤖 AI Business Insights</h2>
+        <p id="summary"></p>
+
+        <hr><br>
+
+        <!-- 🔹 PRODUCT SEARCH -->
+        <h3>📦 Product-wise Sales Prediction</h3>
+        <input id="productSearch" placeholder="Enter product name (e.g., Ball Pen)">
+        <button onclick="analyzeProduct()">Analyze</button>
+
+        <br><br>
+
+        <!-- 🔹 GRAPH -->
+        <canvas id="productChart" height="120"></canvas>
+
+        <!-- 🔹 AI MESSAGE -->
+        <h3 id="decision" style="text-align:center;margin-top:15px;"></h3>
+
+        <br>
+        <button onclick="location.href='dashboard.html'">Back</button>
+    </div>
+
+    <script>
+        const token = localStorage.getItem("token");
+        let allSales = [];
+        let chart;
+
+        /* 🔹 LOAD OVERALL AI SUMMARY */
+        fetch("http://localhost:5000/ai-report", {
+            headers: { Authorization: token }
+        })
+            .then(r => r.json())
+            .then(d => {
+                summary.innerHTML = `
+          <b>Total Sales:</b> ₹${d.totalSales}<br>
+          <b>Total Expenses:</b> ₹${d.totalExpenses}<br>
+          <b>Net Result:</b> ₹${d.profit}<br><br>
+          <b>AI Prediction:</b><br>${d.prediction}
+        `;
+            });
+
+        /* 🔹 LOAD ALL SALES DATA */
+        fetch("http://localhost:5000/sales", {
+            headers: { Authorization: token }
+        })
+            .then(r => r.json())
+            .then(data => allSales = data);
+
+        function analyzeProduct() {
+            const name = productSearch.value.trim().toLowerCase();
+            if (!name) {
+                alert("Enter product name");
+                return;
+            }
+
+            const now = new Date();
+            const thisMonth = now.getMonth();
+            const lastMonth = thisMonth - 1;
+
+            let lastQty = 0;
+            let currentQty = 0;
+
+            allSales.forEach(s => {
+                if (s.product.toLowerCase() === name) {
+                    const d = new Date(s.date);
+                    const m = d.getMonth();
+                    const q = Number(s.qty || 0);
+
+                    if (m === lastMonth) lastQty += q;
+                    if (m === thisMonth) currentQty += q;
+                }
+            });
+
+            const predictedQty = currentQty + (currentQty - lastQty);
+
+            /* 🔹 AI DECISION */
+            if (predictedQty > currentQty && currentQty > 0) {
+                decision.innerText = "✅ This product is selling well → RESTOCK recommended";
+                decision.style.color = "green";
+            } else {
+                decision.innerText = "❌ Low demand → NO restock needed";
+                decision.style.color = "red";
+            }
+
+            /* 🔹 DRAW GRAPH */
+            const ctx = document.getElementById("productChart").getContext("2d");
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: ["Last Month", "Current Month", "Next Month (Predicted)"],
+                    datasets: [{
+                        label: "Quantity Sold",
+                        data: [lastQty, currentQty, predictedQty > 0 ? predictedQty : 0],
+                        backgroundColor: ["#FF9800", "#4CAF50", "#2196F3"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

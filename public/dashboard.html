@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url("https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80");
+            background-size: cover;
+            background-position: center;
+        }
+
+        .dash-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px;
+        }
+
+        .dashboard-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .dash-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cards {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 220px;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 70px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #007bff;
+        }
+
+        .logout {
+            background: #ff4b5c;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dash-container">
+
+        <div class="dashboard-box">
+            <div class="dash-header">
+                <h2>Business Dashboard</h2>
+            </div>
+
+            <div class="cards" id="cards"></div>
+        </div>
+
+        <div style="text-align:center;">
+            <button class="logout" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        const role = localStorage.getItem("role");
+        const cards = document.getElementById("cards");
+
+        if (!role) location.href = "index.html";
+
+        function addCard(title, img, page) {
+            cards.innerHTML += `
+            <div class="card" onclick="location.href='${page}.html'">
+                <img src="${img}">
+                <h3>${title}</h3>
+            </div>`;
+        }
+
+        addCard("Sales", "https://img.icons8.com/color/96/sales-performance.png", "sales");
+        addCard("Expenses", "https://img.icons8.com/color/96/money.png", "expenses");
+        addCard("Product List", "https://img.icons8.com/color/96/product.png", "products");
+
+        /* ✅ OWNER ONLY */
+        if (role === "owner") {
+            addCard("Profit & Loss", "https://img.icons8.com/color/96/combo-chart.png", "profit-loss");
+
+            /* 🤖 AI REPORTS CARD (NEW) */
+            addCard(
+                "AI Reports",
+                "https://img.icons8.com/color/96/artificial-intelligence.png",
+                "reports"
+            );
+        }
+
+        if (role === "owner" || role === "accountant") {
+            addCard("Inventory Control", "https://img.icons8.com/color/96/warehouse.png", "inventory");
+        }
+
+        function logout() {
+            localStorage.clear();
+            location.href = "index.html";
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Expenses</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="box">
+        <h2>Expense Entry</h2>
+
+        <input id="date" type="date">
+        <input id="type" placeholder="Expense Type">
+        <input id="amount" type="number" placeholder="Amount">
+
+        <!-- ✅ PAYMENT MODE -->
+        <select id="paid" onchange="toggleOnline()">
+            <option value="Cash">Cash</option>
+            <option value="Online">Online</option>
+        </select>
+
+        <!-- ✅ ONLINE PAYMENT DETAILS -->
+        <div id="onlineBox" style="display:none;">
+            <input id="upi" placeholder="UPI ID">
+            <input id="receipt" type="file" accept="image/*">
+        </div>
+
+        <button onclick="saveExpense()">Save Expense</button>
+        <button onclick="location.href='expense-records.html'">Expense Records</button>
+
+        <p id="msg"></p>
+    </div>
+
+    <script>
+        function toggleOnline() {
+            onlineBox.style.display =
+                paid.value === "Online" ? "block" : "none";
+        }
+
+        function saveExpense() {
+            const formData = new FormData();
+            formData.append("date", date.value);
+            formData.append("type", type.value);
+            formData.append("amount", amount.value);
+            formData.append("paid", paid.value);
+            formData.append("upi", upi.value);
+            if (receipt.files[0])
+                formData.append("receipt", receipt.files[0]);
+
+            fetch("http://localhost:5000/expenses", {
+                method: "POST",
+                headers: {
+                    Authorization: localStorage.getItem("token")
+                },
+                body: formData
+            })
+                .then(r => r.json())
+                .then(d => {
+                    msg.innerText = d.msg;
+                    setTimeout(() => msg.innerText = "", 2000);
+                });
+        }
+    </script>
+
+</body>
+
+</html>

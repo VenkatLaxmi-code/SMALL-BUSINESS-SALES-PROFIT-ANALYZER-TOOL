@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Profit & Loss</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url("https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80");
+            background-size: cover;
+            background-position: center;
+        }
+
+        canvas {
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box" style="width:90%;max-width:700px;">
+        <h2 style="text-align:center;">Profit & Loss Analysis</h2>
+
+        <canvas id="barChart" height="300"></canvas>
+        <br><br>
+        <canvas id="pieChart" height="300"></canvas>
+
+        <h3 id="result" style="text-align:center;"></h3>
+
+        <div style="text-align:center;">
+            <button onclick="location.href='dashboard.html'">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <script>
+        /* OWNER ONLY */
+        if (localStorage.getItem("role") !== "owner") {
+            alert("Only Owner can view Profit & Loss");
+            location.href = "dashboard.html";
+        }
+
+        /* TOKEN */
+        const token = localStorage.getItem("token");
+
+        /* FETCH REAL DATA */
+        Promise.all([
+            fetch("http://localhost:5000/sales", {
+                headers: { Authorization: token }
+            }).then(r => r.json()),
+
+            fetch("http://localhost:5000/expenses", {
+                headers: { Authorization: token }
+            }).then(r => r.json())
+        ])
+            .then(([sales, expenses]) => {
+
+                console.log("Sales:", sales);
+                console.log("Expenses:", expenses);
+
+                let totalSales = 0;
+                let totalExpenses = 0;
+
+                sales.forEach(s => {
+                    totalSales += Number(s.amount || 0);
+                });
+
+                expenses.forEach(e => {
+                    totalExpenses += Number(e.amount || 0);
+                });
+
+                const profit = totalSales - totalExpenses;
+
+                document.getElementById("result").innerText =
+                    profit >= 0
+                        ? "Profit : ₹ " + profit
+                        : "Loss : ₹ " + Math.abs(profit);
+
+                /* BAR CHART */
+                const barCtx = document.getElementById("barChart").getContext("2d");
+                new Chart(barCtx, {
+                    type: "bar",
+                    data: {
+                        labels: ["Sales", "Expenses"],
+                        datasets: [{
+                            label: "Amount (₹)",
+                            data: [totalSales, totalExpenses],
+                            backgroundColor: ["#4CAF50", "#F44336"]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                /* PIE CHART */
+                const pieCtx = document.getElementById("pieChart").getContext("2d");
+                new Chart(pieCtx, {
+                    type: "pie",
+                    data: {
+                        labels: ["Sales", "Expenses"],
+                        datasets: [{
+                            data: [totalSales, totalExpenses],
+                            backgroundColor: ["#4CAF50", "#F44336"]
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById("result").innerText =
+                    "Error loading Profit & Loss data";
+            });
+        // SIMPLE FUTURE PREDICTION
+        const avgProfit = profit / 6; // assume 6 months trend
+
+        const futureMsg =
+            avgProfit > 0
+                ? "📈 Business is likely to remain PROFITABLE in future"
+                : "📉 Business may face LOSS in future";
+
+        const p = document.createElement("h4");
+        p.style.textAlign = "center";
+        p.innerText = futureMsg;
+        document.querySelector(".box").appendChild(p);
+
+    </script>
+
+</body>
+
+</html>

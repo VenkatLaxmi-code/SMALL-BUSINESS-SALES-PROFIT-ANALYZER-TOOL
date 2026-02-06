@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Inventory Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="box" style="width:95%;max-width:1100px;">
+        <h2>📦 Inventory Dashboard</h2>
+
+        <table border="1" width="100%" style="margin-top:20px;">
+            <tr>
+                <th>Product</th>
+                <th>Cost Price (₹)</th>
+                <th>Initial Stock</th>
+                <th>Sold</th>
+                <th>Available</th>
+                <th>COGS (₹)</th>
+                <th>Status</th>
+                <th>Restock</th>
+            </tr>
+            <tbody id="list"></tbody>
+        </table>
+
+        <br>
+        <button onclick="location.href='dashboard.html'">Back</button>
+    </div>
+
+    <script>
+        const token = localStorage.getItem("token");
+        const list = document.getElementById("list");
+
+        /* 🔄 RESTOCK FUNCTION (FIXED SAFELY) */
+        function restock(productId) {
+            if (!productId) {
+                alert("Invalid product ID");
+                return;
+            }
+
+            const qty = prompt("Enter restock quantity:");
+            if (!qty || Number(qty) <= 0) return;
+
+            fetch("http://localhost:5000/restock", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: localStorage.getItem("token")
+                },
+                body: JSON.stringify({
+                    productId: Number(productId),   // ✅ force number
+                    quantity: Number(qty)           // ✅ force number
+                })
+            })
+                .then(r => r.json())
+                .then(d => {
+                    alert(d.msg);
+                    location.reload();
+                });
+        }
+
+        /* 📦 LOAD INVENTORY DASHBOARD */
+        fetch("http://localhost:5000/inventory-dashboard", {
+            headers: { Authorization: token }
+        })
+            .then(r => r.json())
+            .then(data => {
+                list.innerHTML = "";
+                data.forEach(i => {
+                    list.innerHTML += `
+        <tr>
+            <td>${i.product}</td>
+            <td>${i.costPrice}</td>
+            <td>${i.stock}</td>
+            <td>${i.sold}</td>
+            <td>${i.available}</td>
+            <td>${i.cogs}</td>
+            <td style="color:${i.available < 10 ? 'red' : 'green'}">
+                ${i.status}
+            </td>
+            <td>
+                ${i.status === "Low Stock"
+                            ? `<button onclick="restock(${i.productId})">Restock</button>`
+                            : "-"}
+            </td>
+        </tr>`;
+                });
+            });
+    </script>
+
+</body>
+
+</html>

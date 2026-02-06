@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sales Analysis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="box" style="width:90%;max-width:1000px;">
+        <h2>Sales Analysis</h2>
+
+        <select id="mode" onchange="filterData()">
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+        </select>
+
+        <input id="dateInput" type="date" onchange="filterData()">
+
+        <table border="1" width="100%" style="margin-top:20px;">
+            <tr>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Amount</th>
+            </tr>
+            <tbody id="list"></tbody>
+        </table>
+
+        <button onclick="location.href='dashboard.html'">Back</button>
+    </div>
+
+    <script>
+        const token = localStorage.getItem("token");
+        let allSales = [];
+
+        fetch("http://localhost:5000/sales", {
+            headers: { Authorization: token }
+        })
+            .then(r => r.json())
+            .then(data => {
+                allSales = data;
+            });
+
+        function isSameWeek(d1, d2) {
+            const start = new Date(d2);
+            start.setDate(d2.getDate() - d2.getDay()); // Sunday
+            const end = new Date(start);
+            end.setDate(start.getDate() + 6); // Saturday
+            return d1 >= start && d1 <= end;
+        }
+
+        function filterData() {
+            const m = document.getElementById("mode").value;
+            const selected = new Date(dateInput.value);
+            list.innerHTML = "";
+
+            if (!dateInput.value) return;
+
+            allSales.forEach(s => {
+                const d = new Date(s.date);
+                let show = false;
+
+                if (m === "daily") {
+                    show = d.toDateString() === selected.toDateString();
+                }
+
+                if (m === "weekly") {
+                    show = isSameWeek(d, selected);
+                }
+
+                if (m === "monthly") {
+                    show =
+                        d.getMonth() === selected.getMonth() &&
+                        d.getFullYear() === selected.getFullYear();
+                }
+
+                if (show) {
+                    list.innerHTML += `
+            <tr>
+                <td>${s.date}</td>
+                <td>${s.customer}</td>
+                <td>${s.product}</td>
+                <td>${s.qty}</td>
+                <td>${s.amount}</td>
+            </tr>`;
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

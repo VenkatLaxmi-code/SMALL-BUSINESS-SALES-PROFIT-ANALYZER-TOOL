@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sales</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="box">
+        <h2>Sales Entry</h2>
+
+        <input id="date" type="date">
+        <input id="customer" placeholder="Customer Name">
+        <input id="product" placeholder="Product / Service">
+        <input id="qty" type="number" placeholder="Quantity">
+        <input id="amount" type="number" placeholder="Amount">
+
+        <!-- ✅ PAYMENT MODE -->
+        <select id="payment" onchange="toggleOnline()">
+            <option value="Cash">Cash</option>
+            <option value="Online">Online</option>
+        </select>
+
+        <!-- ✅ ONLINE PAYMENT DETAILS -->
+        <div id="onlineBox" style="display:none;">
+            <input id="upi" placeholder="UPI ID">
+            <input id="receipt" type="file" accept="image/*">
+        </div>
+
+        <button onclick="saveSale()">Save Sale</button>
+        <button onclick="location.href='sales-records.html'">Sales Records</button>
+
+        <p id="msg"></p>
+    </div>
+
+    <script>
+        function toggleOnline() {
+            onlineBox.style.display =
+                payment.value === "Online" ? "block" : "none";
+        }
+
+        function saveSale() {
+            const formData = new FormData();
+            formData.append("date", date.value);
+            formData.append("customer", customer.value);
+            formData.append("product", product.value);
+            formData.append("qty", qty.value);
+            formData.append("amount", amount.value);
+            formData.append("payment", payment.value);
+            formData.append("upi", upi.value);
+            if (receipt.files[0])
+                formData.append("receipt", receipt.files[0]);
+
+            fetch("http://localhost:5000/sales", {
+                method: "POST",
+                headers: {
+                    Authorization: localStorage.getItem("token")
+                },
+                body: formData
+            })
+                .then(r => r.json())
+                .then(d => {
+                    msg.innerText = d.msg;
+                    setTimeout(() => msg.innerText = "", 2000);
+                });
+        }
+    </script>
+
+</body>
+
+</html>

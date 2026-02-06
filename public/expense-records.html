@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Expense Records</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="box" style="width:90%;">
+        <h2>Expense Records</h2>
+
+        <table border="1" width="100%">
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+            <tbody id="list"></tbody>
+        </table>
+
+        <button onclick="location.href='expense-analysis.html'">Analyze</button>
+    </div>
+
+    <script>
+        const role = localStorage.getItem("role");
+        const token = localStorage.getItem("token");
+
+        fetch("http://localhost:5000/expenses", { headers: { Authorization: token } })
+            .then(r => r.json()).then(data => {
+                data.forEach(e => {
+                    list.innerHTML += `
+  <tr>
+   <td>${e.date}</td>
+   <td>${e.type}</td>
+   <td>${e.amount}</td>
+   <td>${role === "owner" || role === "accountant" ?
+                            `<button onclick="edit(${e.id})">Edit</button>
+     <button onclick="del(${e.id})">Delete</button>` : "-"
+                        }</td>
+  </tr>`;
+                });
+            });
+
+        function edit(id) {
+            const a = prompt("New amount:");
+            fetch(`http://localhost:5000/expenses/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: token
+                },
+                body: JSON.stringify({ amount: a })
+            }).then(() => location.reload());
+        }
+
+        function del(id) {
+            fetch(`http://localhost:5000/expenses/${id}`, {
+                method: "DELETE", headers: { Authorization: token }
+            }).then(() => location.reload());
+        }
+    </script>
+
+</body>
+
+</html>

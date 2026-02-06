@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Product List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="box" style="width:90%;max-width:900px;">
+        <h2>📦 Stationery Product List</h2>
+
+        <table border="1" width="100%" style="margin-top:20px;">
+            <tr>
+                <th>ID</th>
+                <th>Product Name</th>
+                <th>Cost (₹)</th>
+            </tr>
+            <tbody id="list"></tbody>
+        </table>
+
+        <br>
+        <button onclick="location.href='dashboard.html'">Back to Dashboard</button>
+    </div>
+
+    <script>
+        /* STATIC PRODUCT DATA – NO FETCH, NO LAG */
+        const products = [
+            { id: 1, name: "Ball Pen", cost: 5 },
+            { id: 2, name: "Gel Pen", cost: 10 },
+            { id: 3, name: "Fountain Pen", cost: 120 },
+            { id: 4, name: "Pencil", cost: 3 },
+            { id: 5, name: "Color Pencil Pack", cost: 80 },
+            { id: 6, name: "Eraser", cost: 2 },
+            { id: 7, name: "Sharpener", cost: 4 },
+            { id: 8, name: "Notebook A4", cost: 40 },
+            { id: 9, name: "Notebook A5", cost: 30 },
+            { id: 10, name: "Spiral Notebook", cost: 60 },
+            { id: 11, name: "Sticky Notes", cost: 25 },
+            { id: 12, name: "Highlighter", cost: 20 },
+            { id: 13, name: "Marker", cost: 25 },
+            { id: 14, name: "Whiteboard Marker", cost: 30 },
+            { id: 15, name: "File Folder", cost: 15 },
+            { id: 16, name: "Ring File", cost: 55 },
+            { id: 17, name: "Plastic Folder", cost: 20 },
+            { id: 18, name: "Paper Clips", cost: 10 },
+            { id: 19, name: "Binder Clips", cost: 15 },
+            { id: 20, name: "Stapler", cost: 80 },
+            { id: 21, name: "Stapler Pins", cost: 20 },
+            { id: 22, name: "Scissors", cost: 60 },
+            { id: 23, name: "Glue Stick", cost: 18 },
+            { id: 24, name: "Correction Pen", cost: 25 },
+            { id: 25, name: "Ruler", cost: 10 },
+            { id: 26, name: "Calculator", cost: 250 },
+            { id: 27, name: "Chart Paper", cost: 15 },
+            { id: 28, name: "Drawing Book", cost: 70 },
+            { id: 29, name: "Sketch Pens", cost: 120 },
+            { id: 30, name: "Sticky Flags", cost: 30 },
+            { id: 31, name: "Office Tape", cost: 20 },
+            { id: 32, name: "Envelopes", cost: 10 },
+            { id: 33, name: "Index Cards", cost: 25 },
+            { id: 34, name: "Clip Board", cost: 90 },
+            { id: 35, name: "Desk Organizer", cost: 150 },
+            { id: 36, name: "Pen Stand", cost: 50 },
+            { id: 37, name: "Whiteboard", cost: 900 },
+            { id: 38, name: "Permanent Marker", cost: 35 },
+            { id: 39, name: "Drawing Scale Set", cost: 120 },
+            { id: 40, name: "Paper Cutter", cost: 300 },
+            { id: 41, name: "Carbon Paper", cost: 40 },
+            { id: 42, name: "Notebook Long", cost: 50 },
+            { id: 43, name: "Graph Book", cost: 60 },
+            { id: 44, name: "Invoice Book", cost: 80 },
+            { id: 45, name: "Receipt Book", cost: 75 },
+            { id: 46, name: "Attendance Register", cost: 100 },
+            { id: 47, name: "Sticky Labels", cost: 30 },
+            { id: 48, name: "Exam Pad", cost: 70 },
+            { id: 49, name: "Plastic Cover", cost: 8 },
+            { id: 50, name: "Document Folder", cost: 35 }
+        ];
+
+        const list = document.getElementById("list");
+
+        products.forEach(p => {
+            list.innerHTML += `
+        <tr>
+            <td>${p.id}</td>
+            <td>${p.name}</td>
+            <td>${p.cost}</td>
+        </tr>
+    `;
+        });
+    </script>
+
+</body>
+
+</html>
