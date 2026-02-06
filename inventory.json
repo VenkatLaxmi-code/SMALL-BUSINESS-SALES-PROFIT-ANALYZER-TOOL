@@ -1,0 +1,252 @@
+[
+  {
+    "productId": 1,
+    "initialStock": 50,
+    "sold": 5
+  },
+  {
+    "productId": 2,
+    "initialStock": 50,
+    "sold": 5
+  },
+  {
+    "productId": 3,
+    "initialStock": 150,
+    "sold": 115
+  },
+  {
+    "productId": 4,
+    "initialStock": 100,
+    "sold": 45
+  },
+  {
+    "productId": 5,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 6,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 7,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 8,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 9,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 10,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 11,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 12,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 13,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 14,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 15,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 16,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 17,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 18,
+    "initialStock": 100,
+    "sold": 45
+  },
+  {
+    "productId": 19,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 20,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 21,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 22,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 23,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 24,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 25,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 26,
+    "initialStock": 50,
+    "sold": 80
+  },
+  {
+    "productId": 27,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 28,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 29,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 30,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 31,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 32,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 33,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 34,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 35,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 36,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 37,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 38,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 39,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 40,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 41,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 42,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 43,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 44,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 45,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 46,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 47,
+    "initialStock": 50,
+    "sold": 40
+  },
+  {
+    "productId": 48,
+    "initialStock": 50,
+    "sold": 45
+  },
+  {
+    "productId": 49,
+    "initialStock": 50,
+    "sold": 0
+  },
+  {
+    "productId": 50,
+    "initialStock": 50,
+    "sold": 0
+  }
+]

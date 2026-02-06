@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1769776967355,
+    "date": "2026-01-08",
+    "customer": "Laxmi",
+    "product": "Ball Pen",
+    "qty": "5",
+    "amount": "25",
+    "payment": "Cash",
+    "upi": ""
+  },
+  {
+    "id": 1769777002344,
+    "date": "2026-01-20",
+    "customer": "Laxmi",
+    "product": "gel pen",
+    "qty": "5",
+    "amount": "50",
+    "payment": "Cash",
+    "upi": ""
+  },
+  {
+    "id": 1769778700471,
+    "date": "2026-01-01",
+    "customer": "latha",
+    "product": "Fountain Pen",
+    "qty": "115",
+    "amount": "13800",
+    "payment": "Cash",
+    "upi": ""
+  },
+  {
+    "id": 1769780851875,
+    "date": "2026-01-09",
+    "customer": "Shiva",
+    "product": "Exam Pad",
+    "qty": "45",
+    "amount": "3150",
+    "payment": "Cash",
+    "upi": ""
+  },
+  {
+    "id": 1769780947887,
+    "date": "2026-01-10",
+    "customer": "jyothi",
+    "product": "Sticky Labels",
+    "qty": "40",
+    "amount": "1200",
+    "payment": "Cash",
+    "upi": ""
+  },
+  {
+    "id": 1769781325071,
+    "date": "2026-01-16",
+    "customer": "Seetha",
+    "product": "Paper Clips",
+    "qty": "45",
+    "amount": "450",
+    "payment": "Cash",
+    "upi": ""
+  },
+  {
+    "id": 1769785527132,
+    "date": "2026-01-21",
+    "customer": "vinnu",
+    "product": "Calculator",
+    "qty": "40",
+    "amount": "10000",
+    "payment": "Cash",
+    "upi": ""
+  },
+  {
+    "id": 1769785642026,
+    "date": "2026-01-01",
+    "customer": "Laxmi",
+    "product": "Pencil",
+    "qty": "45",
+    "amount": "135",
+    "payment": "Cash",
+    "upi": ""
+  }
+]

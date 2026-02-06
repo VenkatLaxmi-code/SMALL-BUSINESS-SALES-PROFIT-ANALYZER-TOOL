@@ -1,0 +1,17 @@
+[
+  {
+    "email": "vyshnavi2603@gmail.com",
+    "password": "$2a$10$hXrKYVI8dNukm16ZkUx.dO17AtFRFHc5BjayJqTCKhnd9KJyvmava",
+    "role": "owner"
+  },
+  {
+    "email": "2803vyshu@gmail.com",
+    "password": "$2a$10$qUoRzThpVWC7uqdzJ3ew7eqeA3dLcxlE49MZeebxf41BFEy/Myevi",
+    "role": "accountant"
+  },
+  {
+    "email": "shivathmikaboghe@gmail.com",
+    "password": "$2a$10$rHPqi7OYeqNdHNP7m5fOIOlnG.B70s4SdPEgQSgjCfagoNNwJ2riu",
+    "role": "staff"
+  }
+]

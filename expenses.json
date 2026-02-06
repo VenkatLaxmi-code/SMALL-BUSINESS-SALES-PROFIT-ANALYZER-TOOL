@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1768912852550,
+    "date": "2026-01-21",
+    "type": "Rent",
+    "amount": "2500",
+    "paid": "Cash",
+    "upi": ""
+  },
+  {
+    "id": 1768912876446,
+    "date": "2026-01-02",
+    "type": "Salary Paid",
+    "amount": "3000",
+    "paid": "Cash",
+    "upi": ""
+  },
+  {
+    "id": 1768912912864,
+    "date": "2025-10-02",
+    "type": "Electricity Bill",
+    "amount": "1500",
+    "paid": "Cash",
+    "upi": ""
+  },
+  {
+    "id": 1768915384713,
+    "date": "2023-01-22",
+    "type": "Travelling",
+    "amount": "500",
+    "paid": "Cash",
+    "upi": ""
+  },
+  {
+    "id": 1768917076611,
+    "date": "2025-05-03",
+    "type": "Manufacture",
+    "amount": "800",
+    "paid": "Cash",
+    "upi": ""
+  }
+]
