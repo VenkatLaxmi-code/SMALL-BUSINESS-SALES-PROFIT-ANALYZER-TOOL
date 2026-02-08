@@ -28,10 +28,22 @@
         <canvas id="productChart" height="120"></canvas>
 
         <!-- 🔹 AI MESSAGE -->
+        <!-- 🔹 AI MESSAGE -->
         <h3 id="decision" style="text-align:center;margin-top:15px;"></h3>
+
+        <hr>
+
+        <!-- 🔹 REPORT ACTION BUTTONS -->
+        <div style="text-align:center; margin-top:15px;">
+            <button onclick="downloadPDF()">📄 Download PDF</button>
+            <button onclick="downloadExcel()">📊 Download Excel</button>
+            <button onclick="emailReport()">📧 Email Report</button>
+
+        </div>
 
         <br>
         <button onclick="location.href='dashboard.html'">Back</button>
+
     </div>
 
     <script>
@@ -118,6 +130,44 @@
                 }
             });
         }
+        function downloadPDF() {
+            fetch("http://localhost:5000/download-pdf", {
+                headers: { Authorization: token }
+            })
+                .then(res => res.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "business-report.pdf";
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                });
+        }
+
+        function downloadExcel() {
+            fetch("http://localhost:5000/download-excel", {
+                headers: { Authorization: token }
+            })
+                .then(res => res.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "business-report.xlsx";
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                });
+        }
+
+        function emailReport() {
+            fetch("http://localhost:5000/email-report", {
+                headers: { Authorization: token }
+            })
+                .then(res => res.json())
+                .then(d => alert(d.msg));
+        }
+
     </script>
 
 </body>
