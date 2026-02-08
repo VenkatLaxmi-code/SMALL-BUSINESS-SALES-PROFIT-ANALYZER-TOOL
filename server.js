@@ -70,7 +70,16 @@ const PRODUCTS = [
     { id: 49, name: "Plastic Cover", cost: 8 },
     { id: 50, name: "Document Folder", cost: 35 }
 ];
-
+const nodemailer = require("nodemailer");
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+        user: "vyshnavi2603@gmail.com",
+        pass: "smgx zhab frmi wlhi"
+    }
+});
 
 /* FILE HELPERS */
 const load = f => fs.existsSync(f) ? JSON.parse(fs.readFileSync(f)) : [];
@@ -157,7 +166,10 @@ app.post("/restock", auth, (req, res) => {
         return res.json({ msg: "Product not found" });
     }
 
-    item.initialStock = Number(item.initialStock) + Number(quantity);
+    const sold = Number(item.sold || 0);
+    const newAvailable = (item.initialStock - sold) + Number(quantity);
+    item.initialStock = sold + newAvailable;
+
     save(INV, inventory);
 
     console.log("UPDATED ITEM:", item); // 🔍 DEBUG
@@ -273,6 +285,133 @@ app.get("/ai-report", auth, (req, res) => {
             profit > 0
                 ? "📈 Business likely to be PROFITABLE"
                 : "📉 Business may face LOSS"
+    });
+});
+const PDFDocument = require("pdfkit");
+
+app.get("/download-pdf", auth, (req, res) => {
+    const sales = load(SALES);
+    const expenses = load(EXP);
+
+    const doc = new PDFDocument();
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=business-report.pdf");
+
+    doc.pipe(res);
+    doc.fontSize(18).text("Business Report", { align: "center" });
+    doc.moveDown();
+
+    doc.fontSize(14).text("Sales:");
+    sales.forEach(s => {
+        doc.fontSize(10).text(
+            `${s.date} | ${s.product} | Qty: ${s.qty} | ₹${s.amount}`
+        );
+    });
+
+    doc.moveDown();
+    doc.fontSize(14).text("Expenses:");
+    expenses.forEach(e => {
+        doc.fontSize(10).text(
+            `${e.date} | ${e.type} | ₹${e.amount}`
+        );
+    });
+
+    doc.end();
+});
+const ExcelJS = require("exceljs");
+async function generateExcel() {
+    const workbook = new ExcelJS.Workbook();
+
+    const salesSheet = workbook.addWorksheet("Sales");
+    salesSheet.columns = [
+        { header: "Date", key: "date" },
+        { header: "Product", key: "product" },
+        { header: "Qty", key: "qty" },
+        { header: "Amount", key: "amount" }
+    ];
+    load(SALES).forEach(s => salesSheet.addRow(s));
+
+    const expSheet = workbook.addWorksheet("Expenses");
+    expSheet.columns = [
+        { header: "Date", key: "date" },
+        { header: "Type", key: "type" },
+        { header: "Amount", key: "amount" }
+    ];
+    load(EXP).forEach(e => expSheet.addRow(e));
+
+    await workbook.xlsx.writeFile("business-report.xlsx");
+}
+
+
+app.get("/download-excel", auth, async (req, res) => {
+    const workbook = new ExcelJS.Workbook();
+
+    const salesSheet = workbook.addWorksheet("Sales");
+    salesSheet.columns = [
+        { header: "Date", key: "date" },
+        { header: "Product", key: "product" },
+        { header: "Qty", key: "qty" },
+        { header: "Amount", key: "amount" }
+    ];
+    load(SALES).forEach(s => salesSheet.addRow(s));
+
+    const expSheet = workbook.addWorksheet("Expenses");
+    expSheet.columns = [
+        { header: "Date", key: "date" },
+        { header: "Type", key: "type" },
+        { header: "Amount", key: "amount" }
+    ];
+    load(EXP).forEach(e => expSheet.addRow(e));
+
+    res.setHeader(
+        "Content-Disposition",
+        "attachment; filename=business-report.xlsx"
+    );
+
+    await workbook.xlsx.write(res);
+    res.end();
+});
+
+const path = require("path");
+
+app.get("/email-report", auth, async (req, res) => {
+    if (req.user.role !== "owner") {
+        return res.status(403).json({ msg: "Only owner allowed" });
+    }
+
+    const pdfPath = path.join(__dirname, "business-report.pdf");
+    const excelPath = path.join(__dirname, "business-report.xlsx");
+
+    // 🔹 CREATE PDF
+    const doc = new PDFDocument();
+    const stream = fs.createWriteStream(pdfPath);
+
+    doc.pipe(stream);
+    doc.fontSize(18).text("Business Report", { align: "center" });
+    doc.end();
+
+    stream.on("finish", async () => {
+        // 🔹 CREATE EXCEL BEFORE EMAIL
+        await generateExcel();
+
+        const mailOptions = {
+            from: "vyshnavi2603@gmail.com",
+            to: "vyshnavi2603@gmail.com",
+            subject: "Business Report",
+            text: "Attached are the business reports.",
+            attachments: [
+                { filename: "business-report.pdf", path: pdfPath },
+                { filename: "business-report.xlsx", path: excelPath }
+            ]
+        };
+
+        transporter.sendMail(mailOptions, (err) => {
+            if (err) {
+                console.error(err);
+                return res.json({ msg: "Email failed", error: err.message });
+            }
+            res.json({ msg: "Email sent successfully" });
+        });
     });
 });
 
