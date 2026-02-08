@@ -12,16 +12,31 @@
         <h2>Expense Entry</h2>
 
         <input id="date" type="date">
-        <input id="type" placeholder="Expense Type">
+
+        <!-- ✅ MAIN EXPENSE CATEGORY -->
+        <select id="category" onchange="loadSubExpenses()">
+            <option value="">Select Expense Type</option>
+            <option value="Fixed Expense">Fixed Expenses</option>
+            <option value="Operating Expense">Operating Expenses</option>
+            <option value="Inventory Expense">Inventory / Purchase Expenses</option>
+            <option value="Marketing Expense">Marketing Expenses</option>
+            <option value="Administrative Expense">Administrative Expenses</option>
+        </select>
+
+        <!-- ✅ SUB EXPENSE TYPE -->
+        <select id="type">
+            <option value="">Select Expense</option>
+        </select>
+
         <input id="amount" type="number" placeholder="Amount">
 
-        <!-- ✅ PAYMENT MODE -->
+        <!-- PAYMENT MODE -->
         <select id="paid" onchange="toggleOnline()">
             <option value="Cash">Cash</option>
             <option value="Online">Online</option>
         </select>
 
-        <!-- ✅ ONLINE PAYMENT DETAILS -->
+        <!-- ONLINE PAYMENT DETAILS -->
         <div id="onlineBox" style="display:none;">
             <input id="upi" placeholder="UPI ID">
             <input id="receipt" type="file" accept="image/*">
@@ -39,13 +54,68 @@
                 paid.value === "Online" ? "block" : "none";
         }
 
+        /* 🧠 EXPENSE MASTER DATA */
+        const expenseMap = {
+            "Fixed Expense": [
+                "Rent",
+                "Electricity",
+                "Water",
+                "Internet"
+            ],
+            "Operating Expense": [
+                "Staff Salary",
+                "Transport",
+                "Delivery Charges"
+            ],
+            "Inventory Expense": [
+                "Pen Purchase",
+                "Notebook Purchase",
+                "Stationery Stock",
+                "Supplier Payment"
+            ],
+            "Marketing Expense": [
+                "Advertising",
+                "Banner Printing",
+                "Online Promotion"
+            ],
+            "Administrative Expense": [
+                "Accountant Fee",
+                "License Fee",
+                "Software Tools",
+                "Taxes"
+            ]
+        };
+
+        function loadSubExpenses() {
+            const sub = document.getElementById("type");
+            sub.innerHTML = `<option value="">Select Expense</option>`;
+
+            const selectedCategory = category.value;
+            if (!expenseMap[selectedCategory]) return;
+
+            expenseMap[selectedCategory].forEach(e => {
+                const opt = document.createElement("option");
+                opt.value = e;
+                opt.textContent = e;
+                sub.appendChild(opt);
+            });
+        }
+
         function saveExpense() {
             const formData = new FormData();
+
             formData.append("date", date.value);
-            formData.append("type", type.value);
+
+            /* ✅ FINAL STORED TYPE (CATEGORY + SUBTYPE) */
+            formData.append(
+                "type",
+                category.value + " - " + type.value
+            );
+
             formData.append("amount", amount.value);
             formData.append("paid", paid.value);
             formData.append("upi", upi.value);
+
             if (receipt.files[0])
                 formData.append("receipt", receipt.files[0]);
 
